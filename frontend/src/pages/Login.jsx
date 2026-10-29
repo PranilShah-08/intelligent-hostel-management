@@ -85,7 +85,7 @@ function Login() {
                 disabled={loading}
                 className="py-2 px-3 text-xs font-semibold rounded-lg border border-blue-300 bg-white hover:bg-blue-50 text-blue-700 text-center transition-colors shadow-2xs flex items-center justify-center gap-1"
               >
-                🎓 Student Demo
+                🎓 Student (Pranil Shah)
               </button>
             </div>
             <div className="text-[10px] text-blue-600/90 text-center mt-2">

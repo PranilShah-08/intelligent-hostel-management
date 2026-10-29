@@ -623,7 +623,7 @@ const WardenComplaints = () => {
                       <span>Attached Breakdown Evidence</span>
                     </span>
                     <a
-                      href={selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : `http://localhost:3000${selectedComplaint.media_url}`}
+                      href={selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : (window.location.hostname.includes("github.io") ? (selectedComplaint.media_url.startsWith("./") ? selectedComplaint.media_url : `.${selectedComplaint.media_url}`) : `http://localhost:3000${selectedComplaint.media_url}`)}
                       target="_blank"
                       rel="noreferrer"
                       className="text-blue-600 hover:text-blue-700 underline text-[10px]"
@@ -634,15 +634,15 @@ const WardenComplaints = () => {
                   {selectedComplaint.media_type === "video" ? (
                     <video
                       controls
-                      src={selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : `http://localhost:3000${selectedComplaint.media_url}`}
+                      src={selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : (window.location.hostname.includes("github.io") ? (selectedComplaint.media_url.startsWith("./") ? selectedComplaint.media_url : `.${selectedComplaint.media_url}`) : `http://localhost:3000${selectedComplaint.media_url}`)}
                       className="w-full max-h-52 rounded-lg bg-black object-contain border border-slate-200"
                     />
                   ) : (
                     <img
-                      src={selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : `http://localhost:3000${selectedComplaint.media_url}`}
+                      src={selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : (window.location.hostname.includes("github.io") ? (selectedComplaint.media_url.startsWith("./") ? selectedComplaint.media_url : `.${selectedComplaint.media_url}`) : `http://localhost:3000${selectedComplaint.media_url}`)}
                       alt="Evidence"
                       className="w-full max-h-52 rounded-lg object-contain bg-white border border-slate-200 cursor-pointer"
-                      onClick={() => window.open(selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : `http://localhost:3000${selectedComplaint.media_url}`, "_blank")}
+                      onClick={() => window.open(selectedComplaint.media_url.startsWith("http") || selectedComplaint.media_url.startsWith("data:") ? selectedComplaint.media_url : (window.location.hostname.includes("github.io") ? (selectedComplaint.media_url.startsWith("./") ? selectedComplaint.media_url : `.${selectedComplaint.media_url}`) : `http://localhost:3000${selectedComplaint.media_url}`), "_blank")}
                     />
                   )}
                 </div>

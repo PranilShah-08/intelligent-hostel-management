@@ -535,7 +535,9 @@ const ComplaintForm = () => {
                 const mediaUrl = comp.media_url
                   ? (comp.media_url.startsWith("http") || comp.media_url.startsWith("data:"))
                     ? comp.media_url
-                    : `http://localhost:3000${comp.media_url}`
+                    : window.location.hostname.includes("github.io")
+                      ? (comp.media_url.startsWith("./") ? comp.media_url : `.${comp.media_url}`)
+                      : `http://localhost:3000${comp.media_url.startsWith("/") ? comp.media_url : "/" + comp.media_url}`
                   : null;
 
                 return (
