@@ -1,3 +1,33 @@
-backend/node_modules
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+.venv/
+env/
+venv/
 
-node_modules
+# Environment Variables
+.env
+*.env
+backend/.env
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.db
+hostel.db
+
+# System & IDE files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+.backup_docs/

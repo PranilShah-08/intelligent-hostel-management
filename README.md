@@ -1,265 +1,129 @@
-# Intelligent Hostel Complaint Management System
+# 🏢 Intelligent Hostel Complaint Management System (HostelPulse)
+### *Next-Generation Campus Grievance Redressal with Local Edge AI Triage & Telemetry*
 
-## 1. Overview
-
-The Intelligent Hostel Complaint Management System is a full stack web application designed to provide a digital, transparent, and efficient way for students to register hostel-related complaints and for wardens/administrators to manage and resolve them in real time. The system eliminates manual complaint handling and introduces secure, role-based, and automated grievance redressal.
-
----
-
-## 2. Key Features
-
-1. Secure student and warden login using JWT authentication  
-2. Online complaint submission by students  
-3. Real-time complaint status tracking  
-4. Dedicated student dashboard  
-5. Dedicated warden dashboard  
-6. Complaint resolution and status update by wardens  
-7. Complaint history and transparency  
-8. Fully responsive modern user interface  
-9. Automated database initialization  
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?style=for-the-badge&logo=github)](https://pranilshah-08.github.io/intelligent-hostel-management/)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python%203.11-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/Frontend-React%20%2B%20Tailwind%20CSS-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![Ollama](https://img.shields.io/badge/AI%20Engine-Ollama%20%28Qwen2.5%203B%29-black?style=for-the-badge&logo=ollama)](https://ollama.ai/)
+[![Project Report](https://img.shields.io/badge/Documentation-27--Page%20Report%20%5BPDF%5D-red?style=for-the-badge&logo=adobeacrobatreader)](./docs/DCDS_PROJECT_REPORT.pdf)
 
 ---
 
-## 3. Technology Stack
+## 🌟 Instant Live Web Access
 
-Frontend  
-React.js  
-Tailwind CSS  
+You can explore and test the complete system right in your browser with **zero installation**:
 
-Backend  
-Node.js  
-Express.js  
+### 🔗 **[Launch Live Web Portal](https://pranilshah-08.github.io/intelligent-hostel-management/)**
 
-Database  
-PostgreSQL  
-
-Authentication & Security  
-JWT (JSON Web Token)  
-Role-based access control  
-
-Tools & Utilities  
-Git & GitHub  
-VS Code  
-Docker (future scope)  
+> **Quick 1-Click Access:** The login page features instant 1-click access buttons:
+> - **👔 Chief Warden Command Center:** `warden@hostel.edu` / `warden123`
+> - **🎓 Resident Student Portal:** `student@hostel.edu` / `student123`
+>
+> *Seamless In-Browser Experience:* When hosted on GitHub Pages, the portal runs an interactive client-side Edge AI simulation with realistic hostel telemetry, real-time priority scoring, and instant role switching.
 
 ---
 
-## 4. Application Screenshots
+## 📖 Executive Summary
 
-Login Page  
-![Login Page](./images/login(1).png)
+The **Intelligent Hostel Complaint Management System** is an enterprise-grade campus grievance portal developed at the **Symbiosis Institute of Technology (SIT), Symbiosis International (Deemed University), Pune**.
 
-Signup Page  
-![Signup Page](./images/signup(2).png)
-
-Student Dashboard  
-![Student Dashboard](./images/studentDashboard(3).png)
-
-Student Profile Information  
-![Student Profile Info](./images/studentAccountInfo(9).png)
-
-Student Submitting Complaint  
-![Student Complaint Submission](./images/createComplaint(4).png)
-
-Student Dashboard After Submitting Complaint  
-![Student Complaint](./images/studentComplaint(5).png)
-
-Warden Dashboard  
-![Warden Dashboard](./images/wardenDashboard(6).png)
-
-Warden Resolves Complaint  
-![Warden Complaint](./images/wardenResolvedComplaint(7).png)
-
-Student Dashboard Updated  
-![Student Dashboard Updated](./images/studentDashboardUpdated(8).png)
-
-Database Schema Diagram  
-![Entity Relationship Diagram](./images/hostelDatabaseErDiagram.png)
+Traditional hostel complaint workflows rely on physical register books or unorganized WhatsApp groups, leading to ignored safety hazards, lost telemetry, and lack of accountability. This project replaces obsolete manual practices with a **modern web portal, dual-stack asynchronous API, and local on-premise Large Language Model (LLM) priority scoring engine** that automatically categorizes issues, estimates resolution timelines, and flags critical hazards (e.g. electrical sparking or pipe bursts) within seconds.
 
 ---
 
-## 5. Project Setup Guide (For All Team Members)
+## 📸 System Showcase & Visual Telemetry
 
-This section explains how any team member can run the project locally without creating any database or tables manually.
+| Chief Warden AI Command Center | Real-Time AI Priority Triage Preview |
+| :---: | :---: |
+| ![Warden Dashboard](./assets/03_warden_command_center.png) | ![Live AI Triage](./assets/07_student_live_ai_triage_preview.png) |
 
-### 5.1 Prerequisites
+| Student Grievance Submission Portal | AI Telemetry & Explanation Modal |
+| :---: | :---: |
+| ![Student Portal](./assets/06_student_grievance_portal.png) | ![Telemetry Modal](./assets/05_warden_complaint_telemetry_modal.png) |
 
-Install the following software:
-
-1. Node.js (version 18 or above recommended)  
-2. npm  
-3. PostgreSQL  
-4. Git  
-5. optional:pgAdmin (only for viewing database tables)  
-
-Note: You do NOT need to manually create any database or tables. The backend automatically creates all required tables on first run.
+| Interactive Account & Session Profile | Formal Entity-Relationship Schema |
+| :---: | :---: |
+| ![Account Profile](./assets/09_account_profile_page.png) | ![ER Diagram](./assets/11_database_er_diagram.png) |
 
 ---
 
-### 5.2 Clone the Repository
+## ⚡ Core Architectural Highlights
 
+1. **Dual-Stack Asynchronous API:**
+   - Powered by Python FastAPI and Uvicorn running on an optimized dual-stack socket (`::` with `IPV6_V6ONLY = 0`) to seamlessly support both IPv4 (`127.0.0.1`) and IPv6 (`::1`).
+2. **On-Premise Privacy-Preserving LLM Triage:**
+   - Integrated with local Ollama runtime (`qwen2.5:3b`) for automated keyword extraction, urgency scoring (1–100), and rationale generation without sending student records to third-party cloud APIs.
+3. **Role-Based Access Control (RBAC):**
+   - Cryptographically signed JWT authentication separating **Resident Students** (lodge complaints, view personal tracking timelines, upload evidence photos) from **Hostel Wardens** (batch AI triage, filter by urgency, inspect telemetry, update resolution statuses).
+4. **Resilient Offline / GitHub Pages Edge Mode:**
+   - Intelligent client-side service worker interceptor that gracefully activates in static hosting environments, maintaining 100% interactive functionality for evaluators and external reviewers.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend:** React 18, Vite 5, Tailwind CSS, React Router v6 (HashRouter for static host compatibility), Heroicons.
+- **Backend:** Python 3.11, FastAPI, Uvicorn (dual-stack socket binding), SQLite / PostgreSQL.
+- **Artificial Intelligence:** Ollama (`qwen2.5:3b`), regex heuristic fallback classifier.
+- **DevOps & Hosting:** GitHub Actions, GitHub Pages, Git.
+- **Documentation:** 27-Page Synchronized Project Report ([docs/DCDS_PROJECT_REPORT.pdf](./docs/DCDS_PROJECT_REPORT.pdf)).
+
+---
+
+## 🚀 Running the Project Locally
+
+### Prerequisites
+- Node.js (v18+)
+- Python 3.10+
+- (Optional) [Ollama](https://ollama.ai/) with `qwen2.5:3b`
+
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/venkateswarlugoud/Intelligent-Hostel-Complaint-Management-System.git
-cd Intelligent-Hostel-Complaint-Management-System
+git clone https://github.com/PranilShah-08/intelligent-hostel-management.git
+cd intelligent-hostel-management
+```
 
+### 2. Launch the Backend
+```bash
+# Set up Python virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
----
+# Install dependencies
+pip install -r requirements.txt
 
-5.3 Backend Setup
+# Run the dual-stack FastAPI server (listens on http://localhost:3000)
+python run_backend.py
+```
 
-Step 1: Navigate to backend folder
-
-cd backend
-
-Step 2: Install backend dependencies
-
-npm install
-
-Step 3: Create environment file
-
-There is a template file named .env.example.
-Create a new file named .env in the same backend folder and add your PostgreSQL credentials:
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASSWORD=your_postgres_password
-
-Note: Each team member must use their own PostgreSQL password. This file is ignored by Git and is not shared.
-
-Step 4: Start the backend server
-
-node server.js
-
-If everything is correct, the terminal will show:
-
-✅ Database tables are ready  
-✅ Application is running on port 3000
-
-At this stage, all required database tables are created automatically.
-
-
----
-
-5.4 Frontend Setup
-
-Step 1: Open a new terminal
-Step 2: Navigate to frontend folder
-
+### 3. Launch the Frontend
+```bash
 cd frontend
-
-Step 3: Install frontend dependencies
-
 npm install
-
-Step 4: Start the frontend application
-
 npm run dev
-
-Step 5: Open the application in browser
-Usually available at:
-
-http://localhost:5173
-
+```
+Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
 ---
 
-5.5 First-Time Usage Instructions
+## 📊 Default Test Credentials
 
-1. Open the web application.
-
-
-2. Create a new account using the Signup page.
-
-
-3. Register as a Student.
-
-
-4. Login using the same credentials.
-
-
-5. Navigate to the complaint submission page.
-
-
-6. Submit your first complaint.
-
-
-
+| Role | Email | Password | Pre-seeded Room & Block |
+| :--- | :--- | :--- | :--- |
+| **Chief Warden** | `warden@hostel.edu` | `warden123` | Warden Office, A Block |
+| **Student** | `student@hostel.edu` | `student123` | Room B-304, B Block |
 
 ---
 
-5.6 If Complaint Submission Is Not Working
+## 📑 Project Report & Deliverables
 
-If complaint submission does not work and backend shows:
-
-Cannot destructure property 'student_id' of 'userInfo' as it is undefined
-
-It means that the student record is missing in the student table.
-
-To fix:
-
-Step 1: Open pgAdmin
-Step 2: Connect to PostgreSQL
-Step 3: Select the postgres database
-Step 4: Open Query Tool
-Step 5: Find your user ID
-
-SELECT * FROM users;
-
-Step 6: Insert matching record into student table
-
-INSERT INTO student (student_id, block_id, usn, room)
-VALUES (3, 34, '22XXXXXXX', 101)
-ON CONFLICT (student_id) DO NOTHING;
-
-Replace 3 with your actual user_id.
-
+The comprehensive 27-page academic report is committed in the repository:
+- **Formal Project Report:** [`docs/DCDS_PROJECT_REPORT.pdf`](./docs/DCDS_PROJECT_REPORT.pdf)
+- **Database Schema:** [`database_schema.sql`](./database_schema.sql)
 
 ---
 
-6. Contribution Guidelines
+## 👥 Authors & Academic Credits
 
-1. All team members must work on separate branches.
-
-
-2. Do not push directly to the main branch.
-
-
-3. All changes must be submitted through pull requests.
-
-
-4. Code must be tested before merging.
-
-
-
-
----
-
-7. Future Scope
-
-1. Migration of backend to Python FastAPI
-
-
-2. AI-based complaint categorization
-
-
-3. Technician and maintenance staff module
-
-
-4. SMS and Email notifications
-
-
-5. Advanced analytics and performance reports
-
-
-6. Cloud deployment
-
-
-
-
----
-
-8. License
-
-This project is developed for academic and educational purposes.
+- **Pranil Shah** (PRN: 22070123086) — *Symbiosis Institute of Technology (SIT), Pune*
+- Under the guidance of faculty and Department of Computer Science & Engineering.

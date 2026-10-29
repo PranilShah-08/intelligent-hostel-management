@@ -1,131 +1,119 @@
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { useState, useEffect } from "react";
 import { useAuth } from "../utils/Auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AccountPage() {
+  const navigate = useNavigate();
   const { headers } = useAuth();
-  const [userName, setUserName] = useState("");
-  const [useremail, setemail] = useState("");
-  const [userphone, setphone] = useState("");
-  const [userUsn, setUsn] = useState("");
-  const [userRoom, setRoom] = useState("");
-  const [userblockID, setblockID] = useState("");
-  const [userblockname, setblockname] = useState("");
-  const [userType, setUserType] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserType = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await fetch("http://localhost:3000/userType", {
-          method: "GET",
-          headers: headers,
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setUserType(data.userType);
-          console.log(data.userType);
-        } else {
-          console.error("Failed to fetch user type");
+        setLoading(true);
+        const detailsRes = await fetch("http://localhost:3000/userDetails/me", { headers });
+        if (detailsRes.ok) {
+          const detailsData = await detailsRes.json();
+          if (detailsData && detailsData.length > 0) {
+            setUserData(detailsData[0]);
+          }
         }
-      } catch (error) {
-        console.error(error.message);
+      } catch (err) {
+        console.error("Profile fetch error:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchUserType();
-  }, []);
-
-  const getuserDetails = async (user_id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/userDetails/${user_id}`,
-        {
-          method: "GET",
-          headers: headers,
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      setUserName(data[0].full_name);
-      setemail(data[0].email);
-      setphone(data[0].phone);
-      setUsn(data[0].usn);
-      setRoom(data[0].room);
-      setblockID(data[0].block_id);
-      setblockname(data[0].block_name);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  useEffect(() => {
-    getuserDetails();
+    fetchProfile();
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 text-slate-800">
       <Navbar />
-      <h2 className="mt-20 ml-5 mr-5 text-2xl font-semibold">Profile</h2>
+      <div className="max-w-2xl mx-auto px-4 py-10">
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            to="/"
+            className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1.5"
+          >
+            ← Back to Dashboard
+          </Link>
+          <span className="text-xs text-slate-400">Authenticated Session</span>
+        </div>
 
-      <ul className="mt-6 flex flex-col ml-5 mr-5 ">
-        <li className="lg:w-1/3  sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-          <div className="flex items-center justify-between w-full">
-            <span>Name</span>
-            <span>{userName}</span>
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-xs space-y-6">
+          <div className="flex items-center gap-4 pb-6 border-b border-slate-100">
+            <div className="h-14 w-14 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
+              {userData?.full_name ? userData.full_name[0].toUpperCase() : "U"}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-bold text-slate-900">
+                  {userData?.full_name || "Hostel Resident"}
+                </h1>
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize border ${
+                  userData?.type === "warden"
+                    ? "bg-amber-50 text-amber-700 border-amber-200"
+                    : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                }`}>
+                  {userData?.type || "Resident"}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">{userData?.email}</p>
+            </div>
           </div>
-        </li>
-        <li className="lg:w-1/3  sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-          <div className="flex items-center justify-between w-full">
-            <span>Email</span>
-            <span>{useremail}</span>
+
+          {loading ? (
+            <div className="py-12 text-center text-slate-400 font-mono text-xs">
+              Loading profile details...
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <span className="text-slate-500 uppercase font-mono text-[10px] font-semibold">Contact Phone</span>
+                <p className="font-semibold text-slate-900 text-sm">{userData?.phone || "Not provided"}</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                <span className="text-slate-500 uppercase font-mono text-[10px] font-semibold">Hostel Wing / Block</span>
+                <p className="font-semibold text-slate-900 text-sm">{userData?.block_name || "Unassigned"}</p>
+              </div>
+
+              {userData?.type === "student" && (
+                <>
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <span className="text-slate-500 uppercase font-mono text-[10px] font-semibold">Room Number</span>
+                    <p className="font-semibold text-slate-900 text-sm">{userData?.room || "Not assigned"}</p>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <span className="text-slate-500 uppercase font-mono text-[10px] font-semibold">Roll / USN Number</span>
+                    <p className="font-semibold text-slate-900 text-sm font-mono">{userData?.usn || "Not specified"}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-xs text-slate-400">Hostel Complaint Management System</span>
+            <button
+              onClick={() => {
+                localStorage.removeItem("jwtToken");
+                navigate("/login");
+              }}
+              className="px-4 py-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 border border-red-200 transition-colors"
+            >
+              Sign Out
+            </button>
           </div>
-        </li>
-        <li className="lg:w-1/3  sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-          <div className="flex items-center justify-between w-full">
-            <span>Phone</span>
-            <span>{userphone}</span>
-          </div>
-        </li>
-        {userType !== "warden" && (
-          <>
-            <li className="lg:w-1/3  sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-              <div className="flex items-center justify-between w-full">
-                <span>USN</span>
-                <span>{userUsn}</span>
-              </div>
-            </li>
-            <li className="lg:w-1/3  sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-              <div className="flex items-center justify-between w-full">
-                <span>Block ID</span>
-                <span>{userblockID}</span>
-              </div>
-            </li>
-            <li className="lg:w-1/3  sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-              <div className="flex items-center justify-between w-full">
-                <span>Block Name</span>
-                <span>{userblockname}</span>
-              </div>
-            </li>
-            <li className="lg:w-1/3 sm:w-full inline-flex items-center gap-x-2 py-3 px-4 text-sm border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-              <div className="flex items-center justify-between w-full">
-                <span>Room</span>
-                <span>{userRoom}</span>
-              </div>
-            </li>
-          </>
-        )}
-      </ul>
-      <button class="mt-5 ml-5 relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-        <Link
-          class=" relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-blue-500 rounded-md group-hover:bg-opacity-0"
-          to="/"
-        >
-          Back
-        </Link>
-      </button>
-    </>
+
+        </div>
+      </div>
+    </div>
   );
 }
 

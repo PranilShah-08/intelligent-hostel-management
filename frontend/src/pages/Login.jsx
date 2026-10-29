@@ -5,182 +5,158 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const performLogin = async (loginEmail, loginPass) => {
+    setErrorMsg("");
+    setLoading(true);
 
     try {
-      const body = { email, password };
       const response = await fetch("http://localhost:3000/login", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: loginEmail, password: loginPass }),
       });
-      console.log(response);
       const data = await response.json();
-      console.log(data);
 
-      if (data.jwtToken) {
+      if (response.ok && data.jwtToken) {
         localStorage.setItem("jwtToken", data.jwtToken);
         navigate("/");
       } else {
-        alert("Invalid credentials. Please check your email and password.");
+        setErrorMsg(data.detail || data || "Invalid email or password.");
       }
     } catch (err) {
-      console.log(err.message);
+      console.error(err);
+      setErrorMsg("Unable to connect to backend server.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <>
-      <div className="flex min-h-screen w-screen  items-center justify-center text-gray-600 bg-gray-50">
-        <div className="relative">
-          <div className="hidden sm:block h-56 w-56 text-indigo-300 absolute a-z-10 -left-20 -top-20">
-            <svg
-              id="patternId"
-              width="100%"
-              height="100%"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <pattern
-                  id="a"
-                  patternUnits="userSpaceOnUse"
-                  width="40"
-                  height="40"
-                  patternTransform="scale(0.6) rotate(0)"
-                >
-                  <rect x="0" y="0" width="100%" height="100%" fill="none" />
-                  <path
-                    d="M11 6a5 5 0 01-5 5 5 5 0 01-5-5 5 5 0 015-5 5 5 0 015 5"
-                    strokeWidth="1"
-                    stroke="none"
-                    fill="currentColor"
-                  />
-                </pattern>
-              </defs>
-              <rect
-                width="800%"
-                height="800%"
-                transform="translate(0,0)"
-                fill="url(#a)"
-              />
-            </svg>
-          </div>
-          <div className="hidden sm:block h-28 w-28 text-indigo-300 absolute a-z-10 -right-20 -bottom-20">
-            <svg
-              id="patternId"
-              width="100%"
-              height="100%"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <pattern
-                  id="b"
-                  patternUnits="userSpaceOnUse"
-                  width="40"
-                  height="40"
-                  patternTransform="scale(0.5) rotate(0)"
-                >
-                  <rect x="0" y="0" width="100%" height="100%" fill="none" />
-                  <path
-                    d="M11 6a5 5 0 01-5 5 5 5 0 01-5-5 5 5 0 015-5 5 5 0 015 5"
-                    strokeWidth="1"
-                    stroke="none"
-                    fill="currentColor"
-                  />
-                </pattern>
-              </defs>
-              <rect
-                width="800%"
-                height="800%"
-                transform="translate(0,0)"
-                fill="url(#b)"
-              />
-            </svg>
-          </div>
-          <div className="relative flex flex-col sm:w-[30rem] rounded-lg border-gray-400 bg-white shadow-lg px-4">
-            <div className="flex-auto p-6">
-              <div className="mb-10 flex flex-shrink-0 flex-grow-0 items-center justify-center overflow-hidden">
-                <a
-                  href="#"
-                  className="flex cursor-pointer items-center gap-2 text-indigo-500 no-underline hover:text-indigo-500"
-                >
-                  <span className="flex-shrink-0 text-3xl font-black  tracking-tight opacity-100">
-                    Login.
-                  </span>
-                </a>
-              </div>
-              {/* /Logo */}
-              <h4 className="mb-2 font-medium text-gray-700 xl:text-xl">
-                Welcome!
-              </h4>
-              <p className="mb-6 text-gray-500">
-                Please sign-in to access your account
-              </p>
-              <form className="mb-4" onSubmit={onSubmit}>
-                <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
-                  >
-                    Email{" "}
-                  </label>
-                  <input
-                    type="text"
-                    className="block w-full cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-indigo-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                    id="email"
-                    name="email-username"
-                    placeholder="Enter your email"
-                    autoFocus=""
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <div className="flex justify-between">
-                    <label
-                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
-                      htmlFor="password"
-                    >
-                      Password
-                    </label>
-                  </div>
-                  <div className="relative flex w-full flex-wrap items-stretch">
-                    <input
-                      type="password"
-                      id="password"
-                      className="relative block flex-auto cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-indigo-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                      name="password"
-                      placeholder="············"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                </div>
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await performLogin(email, password);
+  };
 
-                <div className="mb-4">
-                  <button
-                    className="grid w-full cursor-pointer select-none rounded-md border border-indigo-500 bg-indigo-500 py-2 px-5 text-center align-middle text-sm text-white shadow hover:border-indigo-600 hover:bg-indigo-600 hover:text-white focus:border-indigo-600 focus:bg-indigo-600 focus:text-white focus:shadow-none"
-                    type="submit"
-                  >
-                    Sign in
-                  </button>
-                </div>
-              </form>
-              <p className="mb-4 text-center">
-                Don't have an account yet?
-                <Link
-                  to="/signup"
-                  className="cursor-pointer text-indigo-500 no-underline hover:text-indigo-500"
-                >
-                  {" "}
-                  Create an account{" "}
-                </Link>
-              </p>
+  const quickSignIn = async (demoEmail, demoPass) => {
+    setEmail(demoEmail);
+    setPassword(demoPass);
+    await performLogin(demoEmail, demoPass);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        {/* Institutional Logo Icon */}
+        <div className="inline-flex h-12 w-12 rounded-xl bg-blue-600 text-white items-center justify-center shadow-sm mb-3">
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Hostel Complaint Management
+        </h1>
+        <p className="mt-1 text-sm text-slate-500">
+          Sign in to lodge maintenance requests or manage hostel operations
+        </p>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-6 shadow-sm border border-slate-200 rounded-2xl sm:px-10">
+          
+          {/* Quick Access Account Selector */}
+          <div className="mb-6 p-3.5 bg-blue-50/60 border border-blue-200/80 rounded-xl">
+            <div className="text-[11px] font-bold text-blue-900 uppercase tracking-wider text-center mb-2.5 flex items-center justify-center gap-1.5">
+              <span>⚡</span> 1-Click Instant Demo Access:
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => quickSignIn("warden@hostel.edu", "warden123")}
+                disabled={loading}
+                className="py-2 px-3 text-xs font-semibold rounded-lg border border-blue-300 bg-white hover:bg-blue-50 text-blue-700 text-center transition-colors shadow-2xs flex items-center justify-center gap-1"
+              >
+                👔 Chief Warden
+              </button>
+              <button
+                type="button"
+                onClick={() => quickSignIn("student@hostel.edu", "student123")}
+                disabled={loading}
+                className="py-2 px-3 text-xs font-semibold rounded-lg border border-blue-300 bg-white hover:bg-blue-50 text-blue-700 text-center transition-colors shadow-2xs flex items-center justify-center gap-1"
+              >
+                🎓 Student Demo
+              </button>
+            </div>
+            <div className="text-[10px] text-blue-600/90 text-center mt-2">
+              Click either role above to test the live portal instantly
             </div>
           </div>
+
+          {/* Error Message */}
+          {errorMsg && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg text-center">
+              {errorMsg}
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="warden@hostel.edu or student@hostel.edu"
+                className="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-2xs"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-3.5 py-2 text-sm bg-white border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-2xs"
+              />
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-2xs transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+              >
+                {loading ? "Authenticating..." : "Sign In to Account"}
+              </button>
+            </div>
+          </form>
+
+          {/* Institutional note & registration link */}
+          <div className="mt-6 pt-5 border-t border-slate-100 text-center space-y-2">
+            <p className="text-xs text-slate-500">
+              Need a new account?{" "}
+              <Link to="/signup" className="font-semibold text-blue-600 hover:text-blue-500">
+                Register as Student
+              </Link>
+            </p>
+            <p className="text-[11px] text-slate-400">
+              Intelligent Hostel Management System • Symbiosis Institute of Technology
+            </p>
+          </div>
+
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
