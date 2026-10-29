@@ -227,61 +227,6 @@ def build_database_doc():
         section.right_margin = Inches(0.75)
 
     # ========================================================================
-    # COVER / HEADER BANNER
-    # ========================================================================
-    p_inst = doc.add_paragraph()
-    p_inst.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_inst.paragraph_format.space_before = Pt(0)
-    p_inst.paragraph_format.space_after = Pt(2)
-    r_inst = p_inst.add_run("SYMBIOSIS INSTITUTE OF TECHNOLOGY (SIT), PUNE\n")
-    r_inst.font.name = "Times New Roman"
-    r_inst.font.size = Pt(13)
-    r_inst.font.bold = True
-    r_inst.font.color.rgb = NAVY_COLOR
-
-    r_dept = p_inst.add_run("DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING\n")
-    r_dept.font.name = "Times New Roman"
-    r_dept.font.size = Pt(10)
-    r_dept.font.bold = True
-    r_dept.font.color.rgb = MUTED_COLOR
-
-    p_title = doc.add_paragraph()
-    p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_title.paragraph_format.space_before = Pt(8)
-    p_title.paragraph_format.space_after = Pt(2)
-    r_t = p_title.add_run("DATABASE ARCHITECTURE, SCHEMA & SQL QUERY SPECIFICATION\n")
-    r_t.font.name = "Times New Roman"
-    r_t.font.size = Pt(16)
-    r_t.font.bold = True
-    r_t.font.color.rgb = NAVY_COLOR
-
-    r_sub = p_title.add_run("Intelligent Hostel Complaint Management System (HostelPulse)\n")
-    r_sub.font.name = "Times New Roman"
-    r_sub.font.size = Pt(11.5)
-    r_sub.font.bold = True
-    r_sub.font.color.rgb = SLATE_COLOR
-
-    p_meta = doc.add_paragraph()
-    p_meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_meta.paragraph_format.space_before = Pt(2)
-    p_meta.paragraph_format.space_after = Pt(12)
-    r_meta = p_meta.add_run("Candidate: Pranil Shah (PRN: 22070123086)  |  RDBMS Engine: SQLite 3.x / PostgreSQL 15+  |  Academic Year: 2026")
-    r_meta.font.name = "Times New Roman"
-    r_meta.font.size = Pt(9)
-    r_meta.font.italic = True
-    r_meta.font.color.rgb = MUTED_COLOR
-
-    # Horizontal Divider Line
-    p_div = doc.add_paragraph()
-    p_div.paragraph_format.space_before = Pt(0)
-    p_div.paragraph_format.space_after = Pt(8)
-    r_div = p_div.add_run("━" * 58)
-    r_div.font.name = "Courier New"
-    r_div.font.size = Pt(10)
-    r_div.font.color.rgb = RGBColor(203, 213, 225)
-    p_div.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
-    # ========================================================================
     # SECTION 1: ARCHITECTURAL OVERVIEW
     # ========================================================================
     add_heading_1(doc, "1. Executive Database Overview & Relational Architecture")
@@ -670,8 +615,8 @@ INSERT INTO warden (warden_id, block_id) VALUES (1, 1);""",
 
     add_sql_block(
         doc,
-        "DML-03: Seed Verified Student Residents (SIT Pune)",
-        """-- 1. Pranil Shah (PRN: 22070123086 / USN: 26070126505)
+        "DML-03: Seed Verified Student Residents",
+        """-- 1. Pranil Shah (USN: 26070126505)
 INSERT INTO users (full_name, email, phone, password, type) VALUES
 ('Pranil Shah', 'student@hostel.edu', '+91 98201 26507', 
  '5c827507dd8dd9874ff5407df40d17a138d7f8e3bfb2b2c59861e9079b2983ee', 'student');
@@ -1015,8 +960,11 @@ ORDER BY count DESC;""",
     res = subprocess.run(["osascript", "-e", applescript], capture_output=True, text=True)
     if res.returncode == 0:
         print(f"✅ Successfully exported PDF via Pages: {pdf_path}")
+        desktop_query_pdf = os.path.join(os.path.expanduser("~"), "Desktop", "query_dcds.pdf")
+        shutil.copyfile(pdf_path, desktop_query_pdf)
+        shutil.copyfile(pdf_path, os.path.join(docs_dir, "query_dcds.pdf"))
         shutil.copyfile(pdf_path, desktop_pdf)
-        print(f"✅ Mirrored PDF to Desktop: {desktop_pdf}")
+        print(f"✅ Updated {desktop_query_pdf}")
     else:
         print("❌ Error converting to PDF via Pages:", res.stderr)
         return False
